@@ -8,22 +8,12 @@ const todorouter=express.Router()
 
 todorouter.get("/",async(req,res)=>{
 const userID=req.userID
-const {taskname,status,tag}=req.query
-if(taskname){
-    const todos=await Todomodel.find({takname:taskname,userID:userID})
-    res.send(todos)
-}else if(status){
-    const todos=await Todomodel.find({status:status,userID:userID})
-    res.send(todos)
-}else if(tag){
-    const todos=await Todomodel.find({tag:tag,userID:userID})
-    res.send(todos)
-}else{
-    const todos=await Todomodel.find({userID:userID})
-    res.send(todos)
-}
+const query=req.query
+query.userID=userID
 
-
+// console.log(query)
+const todos=await Todomodel.find(query)
+res.send(todos)
     
 })
 
@@ -54,6 +44,7 @@ todorouter.delete("/delete/:todoID",async(req,res)=>{
 })
 
 todorouter.patch("/edit/:todoID",async(req,res)=>{
+   console.log("aaya bhai")
     const {todoID}=req.params
     const updtaedData=req.body
     const todo=await Todomodel.findOne({_id:todoID})
